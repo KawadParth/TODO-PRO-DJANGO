@@ -12,229 +12,279 @@
     <style>
         :root { 
             --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
-            --glass-bg: rgba(255, 255, 255, 0.95); 
+            --glass-bg: rgba(255, 255, 255, 0.98); 
             --accent: #00cec9;
+            --danger: #ff7675;
         }
         
         body { 
             font-family: 'Poppins', sans-serif; 
-            background: #f0f2f5; 
+            background: #0f0c29;
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
             min-height: 100vh; 
             color: #2d3436; 
             display: flex;
             align-items: center;
+            justify-content: center;
+            padding: 20px;
         }
 
         .app-container { 
-            max-width: 900px; 
-            margin: auto; 
+            max-width: 1000px; 
             background: var(--glass-bg); 
-            border-radius: 24px; 
-            box-shadow: 0 20px 50px rgba(0,0,0,0.1); 
+            border-radius: 30px; 
+            box-shadow: 0 25px 50px rgba(0,0,0,0.3); 
             overflow: hidden; 
             display: flex; 
             flex-direction: column; 
             height: 85vh;
             width: 100%;
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
         }
 
         .app-header { 
             background: var(--primary-gradient); 
-            padding: 30px; 
+            padding: 35px; 
             color: white; 
             position: relative;
         }
 
+        /* Animated Progress Bar */
         .progress-container { 
-            height: 8px; 
-            background: rgba(255,255,255,0.2); 
-            border-radius: 10px; 
+            height: 10px; 
+            background: rgba(255,255,255,0.15); 
+            border-radius: 20px; 
             margin-top: 15px; 
+            overflow: hidden;
         }
 
         .progress-bar { 
             background: var(--accent); 
-            transition: width 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
-            border-radius: 10px; 
+            height: 100%;
+            box-shadow: 0 0 15px var(--accent);
+            transition: width 1s cubic-bezier(0.34, 1.56, 0.64, 1); 
         }
 
-        .task-section { padding: 25px; overflow-y: auto; }
-        
-        /* Custom Scrollbar */
-        .task-section::-webkit-scrollbar { width: 5px; }
-        .task-section::-webkit-scrollbar-thumb { background: #dfe6e9; border-radius: 10px; }
+        .task-section { padding: 30px; overflow-y: auto; scroll-behavior: smooth; }
+        .task-section::-webkit-scrollbar { width: 6px; }
+        .task-section::-webkit-scrollbar-thumb { background: #cbd5e0; border-radius: 10px; }
 
+        /* Interactive Task Cards */
         .task-card { 
-            border: 1px solid #edf2f7; 
-            border-radius: 16px; 
-            margin-bottom: 12px; 
-            transition: all 0.2s ease; 
+            border: 1px solid #f1f5f9; 
+            border-radius: 18px; 
+            margin-bottom: 15px; 
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
             background: white; 
-            animation: slideIn 0.3s ease-out forwards;
-        }
-
-        @keyframes slideIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+            display: flex;
+            align-items: center;
+            padding: 16px 20px;
         }
 
         .task-card:hover { 
-            transform: scale(1.01);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05); 
+            transform: translateX(5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05); 
             border-color: #667eea;
         }
 
-        .action-btn { 
-            width: 35px; 
-            height: 35px; 
-            display: inline-flex; 
-            align-items: center; 
-            justify-content: center; 
-            border-radius: 10px; 
-            transition: 0.2s;
+        /* Checkbox Interaction */
+        .check-circle {
+            width: 26px;
+            height: 26px;
+            border: 2px solid #cbd5e0;
+            border-radius: 50%;
+            margin-right: 15px;
+            cursor: pointer;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        .action-btn:hover { background: #ff7675 !important; color: white !important; }
+        .task-card:hover .check-circle { border-color: var(--accent); }
 
+        .task-text { font-size: 1.05rem; color: #4a5568; transition: 0.3s; }
+
+        /* Action Buttons */
+        .delete-btn {
+            color: #a0aec0;
+            transition: 0.3s;
+            padding: 8px;
+            border-radius: 10px;
+        }
+
+        .delete-btn:hover { 
+            color: var(--danger); 
+            background: #fff5f5;
+            transform: rotate(10deg);
+        }
+
+        /* Bottom Input Dock */
         .input-wrapper { 
-            padding: 20px 30px; 
-            background: white; 
-            border-top: 1px solid #eee; 
+            padding: 25px 40px; 
+            background: #ffffff; 
+            border-top: 1px solid #f1f5f9; 
         }
 
         .custom-input-group { 
-            background: #f8f9fa; 
-            border-radius: 15px; 
-            padding: 5px 5px 5px 15px; 
+            background: #f8fafc; 
+            border-radius: 20px; 
+            padding: 8px 8px 8px 20px; 
             display: flex; 
             align-items: center;
-            border: 2px solid transparent;
-            transition: 0.3s;
+            border: 2px solid #f1f5f9;
+            transition: 0.3s ease;
         }
 
         .custom-input-group:focus-within {
             border-color: #667eea;
             background: white;
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
         }
 
-        .custom-input-group input { border: none; background: transparent; outline: none; width: 100%; padding: 10px; }
+        .custom-input-group input { 
+            border: none; 
+            background: transparent; 
+            outline: none; 
+            flex-grow: 1; 
+            padding: 10px;
+            font-size: 1rem;
+        }
 
         .btn-add-task { 
             background: var(--primary-gradient); 
             color: white; 
             border: none; 
-            padding: 10px 25px; 
-            border-radius: 12px; 
+            padding: 12px 28px; 
+            border-radius: 15px; 
             font-weight: 600; 
             transition: 0.3s;
         }
 
-        .btn-add-task:hover { opacity: 0.9; transform: translateY(-1px); }
-        
-        .check-btn {
-            color: #b2bec3;
-            font-size: 1.2rem;
-            transition: 0.2s;
+        .btn-add-task:hover { 
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(118, 75, 162, 0.3);
         }
-        
-        .check-btn:hover { color: var(--accent); transform: scale(1.1); }
+
+        .nav-back {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            color: rgba(255,255,255,0.7);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: 0.3s;
+        }
+        .nav-back:hover { color: white; }
+
     </style>
 </head>
 <body>
 
-<div class="container d-flex justify-content-center">
-    <div class="app-container">
-        <div class="app-header">
-            <div class="d-flex justify-content-between align-items-center">
-                <div>
-                    <h3 class="fw-bold mb-0">Focus Mode <i class="fa-solid fa-bolt text-warning"></i></h3>
-                    <p class="opacity-75 small mb-0">{% now "l, F jS" %}</p>
-                </div>
-                <div class="text-end">
-                    <small class="opacity-75">Tasks</small>
-                    <h4 class="mb-0 fw-bold">{{ upcoming_tasks.count }}</h4>
-                </div>
+<a href="/" class="nav-back"><i class="fa-solid fa-chevron-left"></i> Exit Focus Mode</a>
+
+<div class="app-container">
+    <div class="app-header">
+        <div class="d-flex justify-content-between align-items-start">
+            <div>
+                <h2 class="fw-bold mb-1">Focus Mode <i class="fa-solid fa-fire-alt text-warning ms-2"></i></h2>
+                <p class="opacity-75 mb-0">{% now "l, F jS" %}</p>
             </div>
-            
-            <div class="d-flex justify-content-between align-items-end mt-4">
-                <small class="fw-semibold">Daily Progress</small>
+            <div class="text-end">
+                <span class="badge bg-white text-dark rounded-pill px-3 py-2">
+                    <i class="fa-solid fa-list-check me-2 text-primary"></i>{{ upcoming_tasks.count }} Left
+                </span>
+            </div>
+        </div>
+        
+        <div class="mt-4">
+            <div class="d-flex justify-content-between mb-1">
+                <small class="ls-1 fw-bold text-uppercase opacity-75" style="font-size: 0.7rem;">Your Daily Score</small>
                 <small class="fw-bold">{{ progress }}%</small>
             </div>
             <div class="progress-container">
                 <div class="progress-bar" style="width: {{ progress }}%"></div>
             </div>
         </div>
+    </div>
 
-        <div class="row g-0 flex-grow-1 overflow-hidden">
-            <div class="col-md-7 task-section border-end bg-white">
-                <h6 class="text-uppercase text-muted fw-bold mb-4 small ls-1">Upcoming Tasks</h6>
-                
-                <div class="task-list">
-                    {% for task in upcoming_tasks %}
-                    <div class="task-card p-3 d-flex align-items-center justify-content-between">
-                        <div class="d-flex align-items-center flex-grow-1">
-                            <a href="{% url 'toggle_task' task.pk %}" class="check-btn me-3" onclick="celebrate()">
-                                <i class="fa-regular fa-circle"></i>
-                            </a>
-                            <span class="task-text fw-medium">{{ task.title }}</span>
-                        </div>
-                        <div class="d-flex">
-                            <a href="{% url 'delete_task' task.pk %}" class="action-btn text-muted bg-light">
-                                <i class="fa-solid fa-trash-can fa-sm"></i>
-                            </a>
-                        </div>
-                    </div>
-                    {% empty %}
-                    <div class="text-center py-5">
-                        <div class="mb-3">
-                            <i class="fa-solid fa-mug-hot fa-3x text-light-emphasis opacity-25"></i>
-                        </div>
-                        <p class="text-muted">No pending tasks. You're efficient!</p>
-                    </div>
-                    {% endfor %}
-                </div>
-            </div>
-
-            <div class="col-md-5 task-section bg-light-subtle">
-                <h6 class="text-uppercase text-muted fw-bold mb-4 small ls-1">Done & Dusted</h6>
-                {% for task in completed_tasks %}
-                <div class="task-card p-2 px-3 border-0 bg-white mb-2 shadow-sm d-flex justify-content-between align-items-center opacity-75">
-                    <span class="small text-decoration-line-through text-muted">{{ task.title }}</span>
-                    <a href="{% url 'toggle_task' task.pk %}" class="text-success ms-2"><i class="fa-solid fa-circle-check"></i></a>
+    <div class="row g-0 flex-grow-1 overflow-hidden">
+        <div class="col-md-7 task-section border-end bg-white">
+            <h6 class="text-uppercase text-muted fw-bold mb-4 small ls-1">Current Sprint</h6>
+            
+            <div class="task-list">
+                {% for task in upcoming_tasks %}
+                <div class="task-card" id="task-{{ task.pk }}">
+                    <a href="{% url 'toggle_task' task.pk %}" class="check-circle" onclick="celebrate(event)">
+                        <i class="fa-solid fa-check text-white small" style="display:none"></i>
+                    </a>
+                    <span class="task-text flex-grow-1 fw-medium">{{ task.title }}</span>
+                    <a href="{% url 'delete_task' task.pk %}" class="delete-btn">
+                        <i class="fa-solid fa-trash-can"></i>
+                    </a>
                 </div>
                 {% empty %}
-                <p class="text-center text-muted small py-4">Nothing completed yet today.</p>
+                <div class="text-center py-5 opacity-25">
+                    <i class="fa-solid fa-cloud-sun fa-4x mb-3"></i>
+                    <p class="fw-bold">Clear skies! No pending tasks.</p>
+                </div>
                 {% endfor %}
             </div>
         </div>
 
-        <div class="input-wrapper">
-            <form action="{% url 'task_list' %}" method="POST">
-                {% csrf_token %}
-                <div class="custom-input-group">
-                    <i class="fa-solid fa-plus text-muted"></i>
-                    <input type="text" name="task_name" placeholder="What's your next win?..." required autocomplete="off">
-                    <button type="submit" class="btn-add-task shadow-sm">Add Task</button>
-                </div>
-            </form>
+        <div class="col-md-5 task-section bg-light-subtle">
+            <h6 class="text-uppercase text-muted fw-bold mb-4 small ls-1">Victory Lap</h6>
+            {% for task in completed_tasks %}
+            <div class="task-card py-2 px-3 border-0 bg-white mb-2 shadow-sm opacity-50" style="transform: scale(0.95);">
+                <i class="fa-solid fa-circle-check text-success me-3"></i>
+                <span class="small text-decoration-line-through text-muted flex-grow-1">{{ task.title }}</span>
+                <a href="{% url 'toggle_task' task.pk %}" class="text-muted small"><i class="fa-solid fa-rotate-left"></i></a>
+            </div>
+            {% empty %}
+            <div class="text-center py-4 opacity-25">
+                <p class="small">Finish a task to see it here!</p>
+            </div>
+            {% endfor %}
         </div>
+    </div>
+
+    <div class="input-wrapper">
+        <form action="{% url 'task_list' %}" method="POST" id="taskForm">
+            {% csrf_token %}
+            <div class="custom-input-group">
+                <i class="fa-solid fa-pen-nib text-muted ms-2"></i>
+                <input type="text" name="task_name" placeholder="Type a new goal and hit Enter..." required autocomplete="off">
+                <button type="submit" class="btn-add-task shadow-sm">Add <i class="fa-solid fa-plus ms-1"></i></button>
+            </div>
+        </form>
     </div>
 </div>
 
 <script>
-    // Celebration effect when a task is checked
-    function celebrate() {
+    // Smooth Celebration Logic
+    function celebrate(e) {
+        // We let the link click happen, but trigger confetti first
         confetti({
-            particleCount: 100,
-            spread: 70,
-            origin: { y: 0.6 },
-            colors: ['#667eea', '#764ba2', '#00cec9']
+            particleCount: 120,
+            spread: 60,
+            origin: { y: 0.8 },
+            colors: ['#667eea', '#00cec9', '#ffffff']
         });
     }
 
-    // Optional: Trigger celebration if a task was just completed (via URL param or similar)
-    {% if progress == 100 and upcoming_tasks.count == 0 %}
-    window.onload = celebrate;
+    // Auto-focus input on page load
+    window.onload = () => {
+        document.querySelector('input[name="task_name"]').focus();
+    };
+
+    // Full screen completion celebration
+    {% if progress == 100 and upcoming_tasks.count > 0 %}
+    // Only fire if we just finished the last one
     {% endif %}
 </script>
 
